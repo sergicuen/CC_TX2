@@ -82,8 +82,13 @@ do
     #  timeout -k A B runs the command for A seconds, and if it is not terminated, it will kill it after B seconds
     #  timeout --preserve-status returns 124 when the time limit is reached. Otherwise, it returns the exit status of the managed command.
 
-# MMult 
-timeout --preserve-status -s 9 -k 40s 20s ssh sergio@172.19.33.156 -p 22 $BINDIR/bin/$NAMEBENCH -s 1024 -x 32 -y 32 -r 50 -b 1 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+# MMult UNHARD 1024
+timeout --preserve-status -s 9 -k 40s 20s ssh sergio@192.168.1.132 -p 22 $BINDIR/bin/$NAMEBENCH -s 1024 -x 32 -y 32 -r 100 -b 0 -k 1 -g 0 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+
+# MMult REDUNDANT 1024
+#timeout --preserve-status -s 9 -k 40s 20s ssh sergio@192.168.1.132 -p 22 $BINDIR/bin/$NAMEBENCH -s 1024 -x 32 -y 32 -r 100 -b 1 -k 1 -g 0 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+
+
 
 
 # Modo nn heavy
