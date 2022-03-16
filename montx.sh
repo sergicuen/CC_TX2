@@ -65,7 +65,7 @@ echo "mmult"
 
 for (( ; ; )) #for (( i=0; i<100; i++ ))    # Esto debe ser for (( ; ; )) corre para siempre
 do
-    if [[ $estado -eq 75 ]]
+    if [[ $estado -eq 75 ]] # hay que rebotar
     then
         now=$(date +%Y%m%d_%H_%M_%S_)
         echo "Reboot tras HANG" | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
@@ -87,28 +87,34 @@ do
 # MMult UNHARD 2048
 #timeout --preserve-status -s 9 -k 60s 60s ssh sergio@192.168.1.132 -p 22 $BINDIR/bin/$NAMEBENCH -s 2048 -x 32 -y 32 -r 20 -b 0 -k 1 -g 0 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
 
+# MMult UNHARD 3072
+#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@192.168.1.132 -p 22 $BINDIR/bin/$NAMEBENCH -s 3072 -x 32 -y 32 -r 3 -b 0 -k 1 -g 0 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+
+
 # MMult REDUNDANT 1024
-#timeout --preserve-status -s 9 -k 60s 60s ssh sergio@192.168.1.132 -p 22 $BINDIR/bin/$NAMEBENCH -s 1024 -x 32 -y 32 -r 80 -b 1 -k 1 -g 0 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+#timeout --preserve-status -s 9 -k 60s 60s ssh sergio@192.168.1.132 -p 22 $BINDIR2/mmult/bin/$NAMEBENCH -s 1024 -x 32 -y 32 -r 80 -b 1 -k 1 -g 0 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
 
 # MMult REDUNDANT 2048
-timeout --preserve-status -s 9 -k 25s 25s ssh sergio@192.168.1.132 -p 22 $BINDIR/bin/$NAMEBENCH -s 2048 -x 32 -y 32 -r 10 -b 1 -k 1 -g 0 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@192.168.1.132 -p 22 $BINDIR2/mmult/bin/$NAMEBENCH -s 2048 -x 32 -y 32 -r 10 -b 1 -k 1 -g 0 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+
+# MMult REDUNDANT 3072
+#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@192.168.1.132 -p 22 $BINDIR2/mmult/bin/$NAMEBENCH -s 3072 -x 32 -y 32 -r 3 -b 1 -k 1 -g 0 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
 
 
-
-# Modo nn heavy
-#timeout --preserve-status -s 9 -k 40s 20s ssh sergio@172.19.33.156 -p 22 $BINDIR/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 1 -f 1 -s 1 -a 1 -k 1 -g 1 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+# Modo nn UNHARD heavy 
+#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@172.19.33.156 -p 22 $BINDIR/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 1 -f 1 -s 1 -a 1 -k 10000 -g 0 -b 4| ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
 
 # Modo nn_redundant friendly
-#timeout --preserve-status -s 9 -k 40s 20s ssh sergio@172.19.33.156 -p 22 $BINDIR/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 850 -f 1 -s 850 -a 1 -k 1 -g 1 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@172.19.33.156 -p 22 $BINDIR/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 850 -f 1 -s 850 -a 1 -k 10000 -g 0 -b 2| ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
 
 # Modo nn_redundant heavy
-#timeout --preserve-status -s 9 -k 40s 20s ssh sergio@172.19.33.156 -p 22 $BINDIR/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 1 -f 1 -s 1 -a 1 -k 1 -g 1 | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
-
-
-    estado=$?  # recuperamos lo que retorna timeout
+#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@172.19.33.156 -p 22 $BINDIR/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 1 -f 1 -s 1 -a 1 -k 10000 -g 0 -b 3| ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+	
+	estado=$?  # recuperamos lo que retorna timeout
     echo "$estado"
     ((i=i+1))
-    if [[ $estado -ne 0 ]]
+	
+	if [[ $estado -ne 0 ]]
     then
         if [[ $estado -eq 1 ]] # EXIT_FAILURE
         then
@@ -116,12 +122,39 @@ timeout --preserve-status -s 9 -k 25s 25s ssh sergio@192.168.1.132 -p 22 $BINDIR
         else  #hang
             # if [[ $estado -eq 137 ]] # workaround
             # then
-                # echo "CONTINUE verificar si es crítico"
+               # echo "CONTINUE verificar si es crítico"
             # else
                 echo "posible HANG" | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
                 estado=75
                 #((boot_counter=boot_counter+1))
-            # fi
+            #fi
         fi
     fi
+	
+	## No funciona bien porque ssh devuelve también 0 algunas veces y se interpreta como hang
+	
+    # if [[ $estado -ne 65 ]]
+    # then
+        # if [[ $estado -eq 1 ]] # EXIT_FAILURE
+        # then
+            # echo "ERROR en GPU" | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+			 # estado=75
+        # else  #hang
+            # if [[ $estado -eq 0 ]] # workaround
+             # then
+                # echo "posible error conexión" | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+                # estado=75
+            # fi
+			# if [[ $estado -eq 137 ]] # workaround
+             # then
+                # echo "posible HANG" | ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+                # estado=75
+            # fi
+
+        # fi
+    # fi
+	
+
 done
+
+
