@@ -63,7 +63,7 @@ python3 rele_off.py
 sleep 25  # esperamos a que arranque linux y se asigne IP
 
 
-echo "mmult"
+echo $1
 
 for (( ; ; )) #for (( i=0; i<100; i++ ))    # Esto debe ser for (( ; ; )) corre para siempre
 do
@@ -104,13 +104,13 @@ do
 
 
 # Modo nn UNHARD heavy 
-#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@172.19.33.156 -p 22 $BINDIR/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 1 -f 1 -s 1 -a 1 -k 10000 -g 0 -b 4| ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+timeout --preserve-status -s 9 -k 25s 25s ssh sergio@172.19.33.156 -p 22 $BINDIR/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 1 -f 1 -s 1 -a 1 -k 10000 -g 0 -b 4| ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
 
 # Modo nn_redundant friendly
-#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@172.19.33.156 -p 22 $BINDIR/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 850 -f 1 -s 850 -a 1 -k 10000 -g 0 -b 2| ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@172.19.33.156 -p 22 $BINDIR2/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 850 -f 1 -s 850 -a 1 -k 10000 -g 0 -b 2| ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
 
 # Modo nn_redundant heavy
-#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@172.19.33.156 -p 22 $BINDIR/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 1 -f 1 -s 1 -a 1 -k 10000 -g 0 -b 3| ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
+#timeout --preserve-status -s 9 -k 25s 25s ssh sergio@172.19.33.156 -p 22 $BINDIR2/nn/bin/$NAMEBENCH filelist_64 -r 1000 -lat 30 -q 1 -w 1 -f 1 -s 1 -a 1 -k 10000 -g 0 -b 3| ts "%Y%m%d_%H_%M_%S:" >> $DIRLOG/$now$NAMEBENCH.csv
 	
 	estado=$?  # recuperamos lo que retorna timeout
     echo "$estado"
