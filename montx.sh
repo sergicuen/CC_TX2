@@ -41,6 +41,7 @@
 
 # path en SUT (Jetson)
 BINDIR=/home/sergio/202203_CNA_tests/TX2_benchmarks/$1
+BINDIR2=/home/sergio/202203_CNA_tests/TX2_benchmarks/
 #now=$(date +%Y%m%d_%H_%M_%S_)
 NAMEBENCH=$1
 now=$(date +%Y%m%d_%H_%M_%S_)
